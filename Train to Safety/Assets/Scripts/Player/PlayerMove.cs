@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -9,7 +9,7 @@ public class PlayerMove : MonoBehaviour
 	private float moveLimiter = 0.7f;
 
 	private Rigidbody2D rb;
-	private Animator animator;
+	private Animator[] animators;
 
 	private Vector2 movement;
 	private bool facingRight;
@@ -20,7 +20,10 @@ public class PlayerMove : MonoBehaviour
 	void Start()
     {
 		rb = GetComponent<Rigidbody2D>();
-		animator = GetComponent<Animator>();
+		animators = new Animator[3];
+		for(int i = 0; i < animators.Length; i++) {
+			animators[i] = GetComponentsInChildren<Animator>()[i];
+		}
 		facingRight = true;
 	}
 
@@ -40,12 +43,19 @@ public class PlayerMove : MonoBehaviour
 		flipPlayer(horizontal);
 	}
 
-
 	private void handleMovement(float horizontal, float vertical)
 	{
 		// Set animations
-		if (horizontal == 0 && vertical == 0) animator.SetBool("isMoving", false);
-		else animator.SetBool("isMoving", true);
+		if (horizontal == 0 && vertical == 0)  {			
+			foreach(Animator animator in animators) {
+				animator.SetBool("isMoving", false);
+			}
+		}
+		else  {
+			foreach(Animator animator in animators) {
+				animator.SetBool("isMoving", true);
+			}		
+		}
 
 		if (horizontal != 0 && vertical != 0) // Check for diagonal movement
 		{
