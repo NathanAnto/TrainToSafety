@@ -1,25 +1,16 @@
 fileFormatVersion: 2
-guid: 28836c2e19a64ec4482d670104c5ce33
+guid: eefbf34eb461fec4ba037c908b4cecab
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 5186755858204641304
-    second: Player2_Walk-Sheet_0
+      213: -4800560195137339814
+    second: Player_aim-Sheet_0
   - first:
-      213: -8357288127198169131
-    second: Player2_Walk-Sheet_1
+      213: 2201174076066590908
+    second: Player_aim-Sheet_1
   - first:
-      213: -675139307845091861
-    second: Player2_Walk-Sheet_2
-  - first:
-      213: 2687154580682063232
-    second: Player2_Walk-Sheet_3
-  - first:
-      213: 7525845322675764318
-    second: Player2_Walk-Sheet_4
-  - first:
-      213: 8783418917167982259
-    second: Player2_Walk-Sheet_5
+      213: -2024184461306927029
+    second: Player_aim-Sheet_2
   externalObjects: {}
   serializedVersion: 11
   mipmaps:
@@ -103,35 +94,11 @@ TextureImporter:
     overridden: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
-  - serializedVersion: 3
-    buildTarget: iPhone
-    maxTextureSize: 2048
-    resizeAlgorithm: 0
-    textureFormat: 4
-    textureCompression: 1
-    compressionQuality: 50
-    crunchedCompression: 0
-    allowsAlphaSplitting: 0
-    overridden: 0
-    androidETC2FallbackOverride: 0
-    forceMaximumCompressionQuality_BC6H_BC7: 0
-  - serializedVersion: 3
-    buildTarget: Android
-    maxTextureSize: 2048
-    resizeAlgorithm: 0
-    textureFormat: 4
-    textureCompression: 1
-    compressionQuality: 50
-    crunchedCompression: 0
-    allowsAlphaSplitting: 0
-    overridden: 0
-    androidETC2FallbackOverride: 0
-    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Player2_Walk-Sheet_0
+      name: Player_aim-Sheet_0
       rect:
         serializedVersion: 2
         x: 0
@@ -145,14 +112,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 818c6f0f8fe0bf740800000000000000
-      internalID: 5186755858204641304
+      spriteID: a5e75fddfebf06db0800000000000000
+      internalID: -4800560195137339814
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Player2_Walk-Sheet_1
+      name: Player_aim-Sheet_1
       rect:
         serializedVersion: 2
         x: 64
@@ -166,14 +133,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 5d773c42ab2f40c80800000000000000
-      internalID: -8357288127198169131
+      spriteID: cb07fbce8242c8e10800000000000000
+      internalID: 2201174076066590908
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Player2_Walk-Sheet_2
+      name: Player_aim-Sheet_2
       rect:
         serializedVersion: 2
         x: 128
@@ -187,71 +154,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: bed7df5606c61a6f0800000000000000
-      internalID: -675139307845091861
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Player2_Walk-Sheet_3
-      rect:
-        serializedVersion: 2
-        x: 192
-        y: 0
-        width: 64
-        height: 64
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 08d3e1e9ad0ba4520800000000000000
-      internalID: 2687154580682063232
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Player2_Walk-Sheet_4
-      rect:
-        serializedVersion: 2
-        x: 256
-        y: 0
-        width: 64
-        height: 64
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: e5cbf94827c217860800000000000000
-      internalID: 7525845322675764318
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Player2_Walk-Sheet_5
-      rect:
-        serializedVersion: 2
-        x: 320
-        y: 0
-        width: 64
-        height: 64
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 3b66e37f7f8f4e970800000000000000
-      internalID: 8783418917167982259
+      spriteID: b486feff4f6a8e3e0800000000000000
+      internalID: -2024184461306927029
       vertices: []
       indices: 
       edges: []
