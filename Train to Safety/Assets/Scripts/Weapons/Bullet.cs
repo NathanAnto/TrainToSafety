@@ -10,10 +10,7 @@ public class Bullet : MonoBehaviour
     // Start is called before the first frame update
     void Start() {
         rb = GetComponent<Rigidbody2D>();
-
-        Debug.Log("Spawning bullet");
         rb.velocity = transform.right * speed;
-
         Destroy(gameObject, 5f);
     }
 }

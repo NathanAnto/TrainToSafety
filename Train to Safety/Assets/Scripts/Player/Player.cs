@@ -6,14 +6,13 @@ using UnityEngine;
 public class Player {
 
     private static Player playerInstance;
-	private GameObject[] bullets { get; set; }
 
    	private float speed { get; set; }
 	private float defaultSpeed { get; }
 	private int health { get; set; }
 	private bool facingRight { get; set; }
     private PlayerState state { get; set; }
-	private Weapon weapon { get; set; }
+	public Weapon weapon { get; set; }
 	private GameObject bullet { get; set; }
 
 	private Rigidbody2D rb { get; set; }
@@ -82,7 +81,7 @@ public class Player {
         get { return this.weapon; }
         set {
             this.weapon = value;
-            //this.bullet = Ranged.Bullet;
+            // this.bullet = Ranged.Bullet;
         }
     }
 }
@@ -91,5 +90,6 @@ public enum PlayerState {
     idle,
     moving,
     aiming,
-    shooting
+    attacking,
+    reloading,
 }

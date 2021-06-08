@@ -2,17 +2,24 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Weapon : MonoBehaviour
+public abstract class Weapon : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
+    [SerializeField] private int damage { get; set; }
+    [SerializeField] private float attackRate { get; set; }
+
+    protected int Damage {
+        get { return damage; }
+        set {
+            damage = value;
+        }
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+    protected float AttackRate {
+        get { return attackRate; }
+        set {
+            attackRate = value;
+        }
     }
+
+    public abstract void changeValue();
 }

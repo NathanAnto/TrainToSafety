@@ -33,6 +33,7 @@ public class PlayerMove : MonoBehaviour
     {
 		handleStates();
 		handleMovement(horizontal, vertical);
+        // Debug.Log(player.State);
 	}
 
 	private void handleStates() {
@@ -43,9 +44,9 @@ public class PlayerMove : MonoBehaviour
 		player.Anim.SetBool("isMoving", player.State == PlayerState.moving);
 
 		// right mouse click
-		if(Input.GetButton("Aim")) 
+		if(Input.GetButton("Fire2")) 
 			player.State = PlayerState.aiming;
-		else if(Input.GetButtonUp("Aim"))
+		else if(Input.GetButtonUp("Fire2"))
 			player.State = PlayerState.idle;
 		player.Anim.SetBool("isAiming", player.State == PlayerState.aiming);
 	}
