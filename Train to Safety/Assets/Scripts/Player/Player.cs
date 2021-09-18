@@ -16,7 +16,9 @@ public class Player {
 	private GameObject bullet { get; set; }
 
 	private Rigidbody2D rb { get; set; }
-	private Animator animator { get; set; }
+	private Animator topAnimator { get; set; }
+    private Animator bottomAnimator { get; set; }
+    private Animator gunAnimator { get; set; }
 
     private Player(float speed) {
         this.speed = speed;
@@ -25,64 +27,56 @@ public class Player {
 
     public static Player getPlayerInstance()  {
         if(playerInstance == null)
-            playerInstance = new Player(2);
+            playerInstance = new Player(5);
 
         return playerInstance;
     }
 
     // Getters & setters
     public float Speed {
-        get { return this.speed; }
-        set {
-            this.speed = value;
-        }
+        get => this.speed;
+        set => this.speed = value;
     }
 
-    public float DefaultSpeed {
-        get { return this.defaultSpeed; }
-    }    
-    
+    public float DefaultSpeed => this.defaultSpeed;
+
     public int Health {
-        get { return this.health; }
-        set {
-            this.health = value;
-        }
+        get => this.health;
+        set => this.health = value;
     }
 
     public PlayerState State {
-        get { return this.state; }
-        set {
-            this.state = value;
-        }
+        get => this.state;
+        set => this.state = value;
     }
 
     public bool FacingRight {        
-        get { return this.facingRight; }
-        set {
-            this.facingRight = value;
-        }
+        get => this.facingRight;
+        set => this.facingRight = value;
     }
 
     public Rigidbody2D Rb2d{        
-        get { return this.rb; }
-        set {
-            this.rb = value;
-        }
+        get => this.rb;
+        set => this.rb = value;
     }
 
-    public Animator Anim {        
-        get { return this.animator; }
-        set {
-            this.animator = value;
-        }
+    public Animator TopAnimator {        
+        get => this.topAnimator;
+        set => this.topAnimator = value;
+    }
+    public Animator BottomAnimator {        
+        get => this.bottomAnimator;
+        set => this.bottomAnimator = value;
+    }
+    public Animator GunAnimator {        
+        get => this.gunAnimator;
+        set => this.gunAnimator = value;
     }
 
     public Weapon PlayerWeapon {
-        get { return this.weapon; }
-        set {
-            this.weapon = value;
-            // this.bullet = Ranged.Bullet;
-        }
+        get => this.weapon;
+        set => this.weapon = value;
+        // this.bullet = Ranged.Bullet;
     }
 }
 

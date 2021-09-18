@@ -15,9 +15,11 @@ public class PlayerMove : MonoBehaviour
     {
 		player = Player.getPlayerInstance();
 		player.Rb2d = GetComponent<Rigidbody2D>();
-		player.Anim = GetComponent<Animator>();
+		player.GunAnimator = transform.GetChild(0).GetComponent<Animator>();
+		player.TopAnimator = transform.GetChild(1).GetComponent<Animator>();
+		player.BottomAnimator = transform.GetChild(2).GetComponent<Animator>();
 		player.FacingRight = true;
-	}
+    }
 
 	void Update()
 	{
@@ -41,27 +43,36 @@ public class PlayerMove : MonoBehaviour
 			player.State = PlayerState.idle;
 		else player.State = PlayerState.moving;
 
-		player.Anim.SetBool("isMoving", player.State == PlayerState.moving);
+		player.GunAnimator.SetBool("isMoving", player.State == PlayerState.moving);
+		player.TopAnimator.SetBool("isMoving", player.State == PlayerState.moving);
+		player.BottomAnimator.SetBool("isMoving", player.State == PlayerState.moving);
 
 		// right mouse click
 		if(Input.GetButton("Fire2")) 
 			player.State = PlayerState.aiming;
 		else if(Input.GetButtonUp("Fire2"))
 			player.State = PlayerState.idle;
-		player.Anim.SetBool("isAiming", player.State == PlayerState.aiming);
+		player.GunAnimator.SetBool("isAiming", player.State == PlayerState.aiming);
+		player.TopAnimator.SetBool("isAiming", player.State == PlayerState.aiming);
+		player.BottomAnimator.SetBool("isAiming", player.State == PlayerState.aiming);
 	}
 
 	private void handleMovement(float horizontal, float vertical)
 	{
 		// slow down animations if aiming and moving
 		if(player.State == PlayerState.aiming) {
-			player.Anim.SetFloat("speedMultiplier", 0.5f);
+			player.GunAnimator.SetFloat("speedMultiplier", 0.5f);
+			player.TopAnimator.SetFloat("speedMultiplier", 0.5f);
+			player.BottomAnimator.SetFloat("speedMultiplier", 0.5f);
 			player.Speed = player.DefaultSpeed/2f;
 		}
 		else {
-			player.Anim.SetFloat("speedMultiplier", 1f);
+			player.GunAnimator.SetFloat("speedMultiplier", 1f);
+			player.TopAnimator.SetFloat("speedMultiplier", 1f);
+			player.BottomAnimator.SetFloat("speedMultiplier", 1f);
 			player.Speed = player.DefaultSpeed;
 		}
+		
 
 		if (horizontal != 0 && vertical != 0) // Check for diagonal movement
 		{
