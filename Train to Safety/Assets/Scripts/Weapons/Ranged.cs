@@ -4,30 +4,31 @@ using UnityEngine;
 
 public class Ranged : Weapon
 {
-    public int ammo;
-    public int magSize;
-    [SerializeField] private GameObject bulletPrefab;
+    [SerializeField] private int ammo;
+    [SerializeField] private int magSize;
+    [SerializeField] private int damage;
+    [SerializeField] private int attackRate;
     
     private int maxAmmo;
     private int maxMagSize;
+    private Animator animator;
     private Player player;
+    private WeaponHandler weaponHandler;
 
     private void Start() {
         player = Player.getPlayerInstance();
         maxAmmo = ammo;
         maxMagSize = magSize;
-    }
-
-    public Ranged(int damage, float attackRate) {
+        weaponHandler = WeaponHandler.instance;
+        
         Damage = damage;
         AttackRate = attackRate;
-    }
-        
-    public void attack() {
-        Debug.Log("Shooting");
+        animator = GetComponent<Animator>();
     }
 
-    public override void changeValue() {
+    public override void changeValue()
+    {
+        animator.SetTrigger("Shoot");
         ammo--;
         magSize--;
         if(magSize <= 0) {
@@ -37,11 +38,10 @@ public class Ranged : Weapon
         }
         else if(ammo <= 0) {
             Debug.Log("Switching weapon...");
-            WeaponHandler.selectNextWeapon();
-            Debug.Log($"Weapon {WeaponHandler.getCurrentWeapon().name}");
+            weaponHandler.selectNextWeapon();
+            Debug.Log($"Weapon {weaponHandler.getCurrentWeapon().name}");
             setMaxAmmo();
         }
-
     }
 
     private void setMaxAmmo() {

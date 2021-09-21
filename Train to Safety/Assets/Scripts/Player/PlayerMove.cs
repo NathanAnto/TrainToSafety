@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,20 +6,20 @@ using UnityEngine;
 public class PlayerMove : MonoBehaviour
 {
 	private Player player;
-	
 	private float moveLimiter = 0.7f;
 	private float horizontal;
 	private float vertical;
+	private Rigidbody2D rb;
+	private Animator animator;
 
 	// Start is called before the first frame update
 	void Start()
     {
-		player = Player.getPlayerInstance();
-		player.Rb2d = GetComponent<Rigidbody2D>();
-		player.GunAnimator = transform.GetChild(0).GetComponent<Animator>();
-		player.TopAnimator = transform.GetChild(1).GetComponent<Animator>();
-		player.BottomAnimator = transform.GetChild(2).GetComponent<Animator>();
+		player = Player.getPlayerInstance(); // Get player singleton
+		rb = GetComponent<Rigidbody2D>();
+		animator = transform.GetChild(0).GetComponent<Animator>(); // Get Animator on Body
 		player.FacingRight = true;
+		player.Speed = player.DefaultSpeed;
     }
 
 	void Update()
@@ -26,54 +27,26 @@ public class PlayerMove : MonoBehaviour
 		// input
 		horizontal = Input.GetAxis("Horizontal");
 		vertical = Input.GetAxis("Vertical");
-		flipPlayer(horizontal);
+		FlipPlayer();
 	}
 
 
     // Fixed Update is called 50 times per second
     void FixedUpdate()
     {
-		handleStates();
-		handleMovement(horizontal, vertical);
-        // Debug.Log(player.State);
-	}
+		HandleStates();
+		HandleMovement();
+    }
 
-	private void handleStates() {
+	private void HandleStates() {
 		if (horizontal == 0 && vertical == 0) 
 			player.State = PlayerState.idle;
-		else player.State = PlayerState.moving;
-
-		player.GunAnimator.SetBool("isMoving", player.State == PlayerState.moving);
-		player.TopAnimator.SetBool("isMoving", player.State == PlayerState.moving);
-		player.BottomAnimator.SetBool("isMoving", player.State == PlayerState.moving);
-
-		// right mouse click
-		if(Input.GetButton("Fire2")) 
-			player.State = PlayerState.aiming;
-		else if(Input.GetButtonUp("Fire2"))
-			player.State = PlayerState.idle;
-		player.GunAnimator.SetBool("isAiming", player.State == PlayerState.aiming);
-		player.TopAnimator.SetBool("isAiming", player.State == PlayerState.aiming);
-		player.BottomAnimator.SetBool("isAiming", player.State == PlayerState.aiming);
+		else
+			player.State = PlayerState.moving;
 	}
 
-	private void handleMovement(float horizontal, float vertical)
+	private void HandleMovement()
 	{
-		// slow down animations if aiming and moving
-		if(player.State == PlayerState.aiming) {
-			player.GunAnimator.SetFloat("speedMultiplier", 0.5f);
-			player.TopAnimator.SetFloat("speedMultiplier", 0.5f);
-			player.BottomAnimator.SetFloat("speedMultiplier", 0.5f);
-			player.Speed = player.DefaultSpeed/2f;
-		}
-		else {
-			player.GunAnimator.SetFloat("speedMultiplier", 1f);
-			player.TopAnimator.SetFloat("speedMultiplier", 1f);
-			player.BottomAnimator.SetFloat("speedMultiplier", 1f);
-			player.Speed = player.DefaultSpeed;
-		}
-		
-
 		if (horizontal != 0 && vertical != 0) // Check for diagonal movement
 		{
 			// limit movement speed diagonally, so you move at 70% speed
@@ -81,27 +54,31 @@ public class PlayerMove : MonoBehaviour
 			vertical *= moveLimiter;
 		}
 
-		player.Rb2d.velocity = new Vector2(horizontal * player.Speed, vertical * player.Speed);
+		if (vertical > 0) 
+		{
+			animator.SetBool("goingUp", true);
+			player.PlayerWeapon.GetComponent<SpriteRenderer>().sortingOrder = 18;
+		}
+		else if(vertical < 0)
+		{
+			animator.SetBool("goingUp", false);
+			player.PlayerWeapon.GetComponent<SpriteRenderer>().sortingOrder = 22;
+		}
+		animator.SetBool("isMoving", player.State == PlayerState.moving);
+		
+		rb.velocity = new Vector2(horizontal * player.Speed, vertical * player.Speed);
 	}
 
-	private void flipPlayer(float horizontal)
+	private void FlipPlayer()
 	{
-		if (horizontal > 0 && !player.FacingRight || horizontal < 0 && player.FacingRight)
-		{
-			rotatePlayer();
-		}
-
-		if(player.State == PlayerState.aiming || player.State == PlayerState.moving) {						
-			// Transforming mouse pos to resemble player pos
-    		Vector2 mouseOnScreen = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-			Vector3 playerPos = transform.localPosition;
-
-			if(	mouseOnScreen.x > playerPos.x && !player.FacingRight ||
-				mouseOnScreen.x < playerPos.x && player.FacingRight)				
-				rotatePlayer();
-		}
+		Vector2 mouseOnScreen = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+		Vector3 playerPos = transform.localPosition;
+		
+		if(	mouseOnScreen.x > playerPos.x && !player.FacingRight ||
+		    mouseOnScreen.x < playerPos.x && player.FacingRight)				
+			RotatePlayer();
 	}	
-	private void rotatePlayer() {
+	private void RotatePlayer() {
 		player.FacingRight = !player.FacingRight;
 		transform.Rotate(0f, 180f, 0f);
 	}

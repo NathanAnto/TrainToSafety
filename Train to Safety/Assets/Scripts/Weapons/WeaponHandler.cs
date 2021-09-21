@@ -1,33 +1,35 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class WeaponHandler : MonoBehaviour
 {
-    [SerializeField] private static int selectedWeapon = 0;
-    
-    private void Start() {
+    private static int selectedWeapon;
+    private Weapon currentWeapon;
+    public static WeaponHandler instance;
+
+    private void Awake()
+    {
+        instance = this;
         Player.getPlayerInstance().PlayerWeapon = getCurrentWeapon();
+        currentWeapon = transform.GetChild(0).GetComponent<Weapon>();
     }
     
-    public static Weapon getCurrentWeapon() {
-        activateWeapon();
-        return GameObject.Find("Weapon").transform.GetChild(selectedWeapon).GetComponent<Weapon>();
+    public Weapon getCurrentWeapon() {
+        return currentWeapon;
     }
 
-    public static void selectNextWeapon() {
+    public void selectNextWeapon() {
         selectedWeapon++;
         Player.getPlayerInstance().PlayerWeapon = getCurrentWeapon();
-        activateWeapon();
     }
 
     private static void activateWeapon() {
        int i = 0;    
-        foreach(Transform weapon in GameObject.Find("Weapon").transform) {
-            if(i == selectedWeapon)
-                weapon.gameObject.SetActive(true);            
-            else
-                weapon.gameObject.SetActive(false);
+        foreach(Transform weapon in GameObject.Find("Gun").transform)
+        {
+            weapon.gameObject.SetActive(i == selectedWeapon);
             i++;
         }
     }
