@@ -11,6 +11,7 @@ public class PlayerMove : MonoBehaviour
 	private float vertical;
 	private Rigidbody2D rb;
 	private Animator animator;
+	float animOffset = 0f;
 
 	// Start is called before the first frame update
 	void Start()
@@ -20,6 +21,12 @@ public class PlayerMove : MonoBehaviour
 		animator = transform.GetChild(0).GetComponent<Animator>(); // Get Animator on Body
 		player.FacingRight = true;
 		player.Speed = player.DefaultSpeed;
+		player.MovementSystem = new MovementSystem(
+			new List<Transform>() {
+				player.PlayerWeapon.transform,
+				player.PlayerWeapon.transform.GetChild(1).transform,
+				player.PlayerWeapon.transform.GetChild(2).transform
+			});
     }
 
 	void Update()
@@ -39,7 +46,7 @@ public class PlayerMove : MonoBehaviour
     }
 
 	private void HandleStates() {
-		if (horizontal == 0 && vertical == 0) 
+		if (horizontal == 0 && vertical == 0)
 			player.State = PlayerState.idle;
 		else
 			player.State = PlayerState.moving;
@@ -54,18 +61,16 @@ public class PlayerMove : MonoBehaviour
 			vertical *= moveLimiter;
 		}
 
-		if (vertical > 0) 
-		{
-			animator.SetBool("goingUp", true);
-			player.PlayerWeapon.GetComponent<SpriteRenderer>().sortingOrder = 18;
-		}
-		else if(vertical < 0)
-		{
-			animator.SetBool("goingUp", false);
-			player.PlayerWeapon.GetComponent<SpriteRenderer>().sortingOrder = 22;
-		}
-		animator.SetBool("isMoving", player.State == PlayerState.moving);
+		string velocityY = "VelocityY";
+		string velocityX = "VelocityX";
+
+		animator.SetFloat(velocityY, vertical+animOffset);
+		animator.SetFloat(velocityX, horizontal);
 		
+		player.MovementSystem.SetVertical(vertical);
+		player.MovementSystem.HandleMovement();
+		animOffset = player.MovementSystem.GetOffset();
+
 		rb.velocity = new Vector2(horizontal * player.Speed, vertical * player.Speed);
 	}
 

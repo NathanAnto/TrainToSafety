@@ -22,7 +22,8 @@ public class PlayerShoot : MonoBehaviour
 
     private void Update()
     {
-        if(objPooler == null)   objPooler = ObjectPooler.instance;
+        if(objPooler == null) objPooler = ObjectPooler.instance;
+        
         // On left mouse click
         if(Input.GetButtonDown("Fire1"))
         {
@@ -32,21 +33,24 @@ public class PlayerShoot : MonoBehaviour
 
     private void attack(object sender, EventArgs e)
     {
-        Debug.Log("shoot");
         var firePointPos = firePoint.position;
         
         Vector3 mouseOnScreen = Utils.GetMouseWorldPosition();
         Vector3 shootDir = (mouseOnScreen - firePointPos).normalized;
-        
+
+        bool canAttack = false;
 
         // Reduce ammo size
-        player.PlayerWeapon.changeValue();
+        player.PlayerWeapon.changeValue(ref canAttack);
 
-        BulletRaycast.Shoot(firePointPos, shootDir);
-        
-        Effect();
+        if (canAttack)
+        {
+            Debug.Log("Shoot");
+            BulletRaycast.Shoot(firePointPos, shootDir);
+            Effect();
+        }
     }
-    
+
     private void Effect()
     {
         objPooler.SpawnFromPool("bullets", firePoint.position, firePoint.rotation);

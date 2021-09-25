@@ -7,38 +7,40 @@ public class Player {
 
     private static Player playerInstance;
 
-   	private float speed { get; set; }
-	private float defaultSpeed { get; }
-	private HealthSystem healthSystem { get; set; }
+    public float DefaultSpeed { get; private set; }
 	private bool facingRight { get; set; }
     private PlayerState state { get; set; }
     private Weapon weapon { get; set; }
+    private HealthSystem healthSystem { get; set; }
+    private MovementSystem movementSystem { get; set; }
 
-    private Player(float speed) {
-        defaultSpeed = speed;
+    private Player(float defaultSpeed)
+    {
+        DefaultSpeed = defaultSpeed;
+        Speed = DefaultSpeed;
     }
 
-    public static Player getPlayerInstance()  {
-        if(playerInstance == null)
-            playerInstance = new Player(5);
-
-        return playerInstance;
+    public static Player getPlayerInstance()
+    {
+        return playerInstance ?? (playerInstance = new Player(5));
     }
 
     // Getters & setters
-    public float Speed {
-        get => speed;
-        set => speed = value;
-    }
-
-    public float DefaultSpeed => defaultSpeed;
+    public float Speed { get; set; }
 
     public HealthSystem HealthSystem {
         get => healthSystem;
-        set
-        {
+        set {
             if(healthSystem == null)
                 healthSystem = value;
+        }
+    }
+    
+    public MovementSystem MovementSystem {
+        get => movementSystem;
+        set {
+            if(movementSystem == null)
+                movementSystem = value;
         }
     }
 

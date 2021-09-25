@@ -20,5 +20,5 @@ public abstract class Weapon : MonoBehaviour
         }
     }
 
-    public abstract void changeValue();
+    public abstract void changeValue(ref bool canAttack);
 }

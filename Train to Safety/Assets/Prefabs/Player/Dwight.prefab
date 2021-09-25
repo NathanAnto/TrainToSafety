@@ -109,8 +109,8 @@ Transform:
   m_LocalPosition: {x: -0.0045000077, y: -0.00020000935, z: 0}
   m_LocalScale: {x: 0.6, y: 0.6, z: 1}
   m_Children:
-  - {fileID: 2670879855967135615}
   - {fileID: 9090492928460916567}
+  - {fileID: 2670879855967135615}
   m_Father: {fileID: 7030796220761332709}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 2.494}
@@ -248,13 +248,21 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 4239969060830474969}
     m_Modifications:
+    - target: {fileID: 1012969755867252607, guid: 3c3ca4cdaf3c7e543bd289e67654f85e, type: 3}
+      propertyPath: m_SortingOrder
+      value: 23
+      objectReference: {fileID: 0}
+    - target: {fileID: 4938582968598121256, guid: 3c3ca4cdaf3c7e543bd289e67654f85e, type: 3}
+      propertyPath: m_SortingOrder
+      value: 23
+      objectReference: {fileID: 0}
     - target: {fileID: 8709752482153234110, guid: 3c3ca4cdaf3c7e543bd289e67654f85e, type: 3}
       propertyPath: m_Name
       value: Shotgun
       objectReference: {fileID: 0}
     - target: {fileID: 8709752482153234110, guid: 3c3ca4cdaf3c7e543bd289e67654f85e, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8709752482153234111, guid: 3c3ca4cdaf3c7e543bd289e67654f85e, type: 3}
       propertyPath: m_LocalPosition.x
@@ -286,7 +294,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8709752482153234111, guid: 3c3ca4cdaf3c7e543bd289e67654f85e, type: 3}
       propertyPath: m_RootOrder
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8709752482153234111, guid: 3c3ca4cdaf3c7e543bd289e67654f85e, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -327,13 +335,21 @@ PrefabInstance:
       propertyPath: m_LocalPosition.y
       value: 0.036
       objectReference: {fileID: 0}
+    - target: {fileID: 4791579548452361454, guid: 6d931daa938eb914bbf4f3635b686129, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4791579548452361454, guid: 6d931daa938eb914bbf4f3635b686129, type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: 4bd641bad68dafe408dbfca72324ca95, type: 2}
     - target: {fileID: 5141541752935647895, guid: 6d931daa938eb914bbf4f3635b686129, type: 3}
       propertyPath: m_Name
       value: Pistol
       objectReference: {fileID: 0}
     - target: {fileID: 5141541752935647895, guid: 6d931daa938eb914bbf4f3635b686129, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5141541752935647897, guid: 6d931daa938eb914bbf4f3635b686129, type: 3}
       propertyPath: m_LocalPosition.x
@@ -365,7 +381,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5141541752935647897, guid: 6d931daa938eb914bbf4f3635b686129, type: 3}
       propertyPath: m_RootOrder
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5141541752935647897, guid: 6d931daa938eb914bbf4f3635b686129, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x

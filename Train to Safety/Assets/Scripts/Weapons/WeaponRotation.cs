@@ -24,13 +24,13 @@ public class WeaponRotation : MonoBehaviour
 
         transform.eulerAngles = new Vector3(0,0,angle);
         
-        Vector3 localScale = transform.GetChild(0).localScale;
+        Vector3 localScale = transform.localScale;
         
         if (angle > 90 || angle < -90) 
             localScale.y = -localScale.x;
         else 
             localScale.y = localScale.x;
 
-        weaponTransform.localScale = localScale;
+        transform.localScale = localScale;
     }
 }

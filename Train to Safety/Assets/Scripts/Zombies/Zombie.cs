@@ -5,11 +5,14 @@ using UnityEngine;
 
 public class Zombie : MonoBehaviour
 {
-    public Transform playerPos;
     protected HealthSystem healthSystem;
-    protected int damage;
+    protected MovementSystem movementSystem;
+    protected Rigidbody2D rb;
+    protected Animator animator;
+    protected Transform playerPos;
     protected float speed;
-    protected float attackDist = 10f;
+    private int damage;
+    private float attackDist = 5f;
     
     protected ZombieState zombieState;
 
@@ -29,21 +32,27 @@ public class Zombie : MonoBehaviour
                 case ZombieState.Chase:
                     StartCoroutine(StateChase());
                     break;
+                case ZombieState.Attack:
+                    StartCoroutine(StateAttack());
+                    break;
             }
         }
     }
 
     private void Start()
     {
+        animator = transform.GetChild(0).GetComponent<Animator>();
         healthSystem = new HealthSystem(20);
-        State = ZombieState.Patrol;
+        movementSystem = new MovementSystem(new List<Transform>());
+        State = ZombieState.Chase;
+        rb = GetComponent<Rigidbody2D>();
     }
 
     private IEnumerator StatePatrol()
     {
         while (State == ZombieState.Patrol)
         {
-            if (Vector2.Distance(transform.position, playerPos.position) < attackDist)
+            if (Vector2.Distance(transform.position, playerPos.position) > attackDist)
                 State = ZombieState.Chase;
                 
             yield return null;
@@ -54,27 +63,30 @@ public class Zombie : MonoBehaviour
     {
         while (State == ZombieState.Chase)
         {
-            if (Vector2.Distance(transform.position, playerPos.position) < attackDist)
-                transform.position = Vector2.MoveTowards(transform.position, playerPos.position, speed * Time.deltaTime);
-            else
+            if (Vector2.Distance(transform.position, playerPos.position) > attackDist)
             {
-                State = ZombieState.Patrol;
+                transform.position = Vector2.MoveTowards(transform.position, playerPos.position, speed * Time.deltaTime);
+                Debug.Log("Moving zombie");
             }
+            else
+                State = ZombieState.Attack;
 
             yield return null;
         } 
     }
+    
+    private IEnumerator StateAttack()
+    {
+        Player.getPlayerInstance().HealthSystem.Damage(damage);
+        yield return null;
+    }
 
-    public virtual void TakeDamage(int dmg)
+    public void TakeDamage(int dmg)
     {
         healthSystem.Damage(dmg);
         if (healthSystem.GetHealth() <= 0) Die();
     }
 
-    public virtual void Attack()
-    {
-        Player.getPlayerInstance().HealthSystem.Damage(damage);
-    }
 
     private void Die()
     {
@@ -87,5 +99,6 @@ public class Zombie : MonoBehaviour
 public enum ZombieState
 {
     Patrol,
-    Chase
+    Chase,
+    Attack
 }
