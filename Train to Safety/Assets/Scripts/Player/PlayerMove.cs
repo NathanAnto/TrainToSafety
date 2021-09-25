@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,63 +6,54 @@ using UnityEngine;
 public class PlayerMove : MonoBehaviour
 {
 	private Player player;
-	
 	private float moveLimiter = 0.7f;
 	private float horizontal;
 	private float vertical;
+	private Rigidbody2D rb;
+	private Animator animator;
+	float animOffset = 0f;
 
 	// Start is called before the first frame update
 	void Start()
     {
-		player = Player.getPlayerInstance();
-		player.Rb2d = GetComponent<Rigidbody2D>();
-		player.Anim = GetComponent<Animator>();
+		player = Player.getPlayerInstance(); // Get player singleton
+		rb = GetComponent<Rigidbody2D>();
+		animator = transform.GetChild(0).GetComponent<Animator>(); // Get Animator on Body
 		player.FacingRight = true;
-	}
+		player.Speed = player.DefaultSpeed;
+		player.MovementSystem = new MovementSystem(
+			new List<Transform>() {
+				player.PlayerWeapon.transform,
+				player.PlayerWeapon.transform.GetChild(1).transform,
+				player.PlayerWeapon.transform.GetChild(2).transform
+			});
+    }
 
 	void Update()
 	{
 		// input
 		horizontal = Input.GetAxis("Horizontal");
 		vertical = Input.GetAxis("Vertical");
-		flipPlayer(horizontal);
+		FlipPlayer();
 	}
 
 
     // Fixed Update is called 50 times per second
     void FixedUpdate()
     {
-		handleStates();
-		handleMovement(horizontal, vertical);
+		HandleStates();
+		HandleMovement();
+    }
+
+	private void HandleStates() {
+		if (horizontal == 0 && vertical == 0)
+			player.State = PlayerState.idle;
+		else
+			player.State = PlayerState.moving;
 	}
 
-	private void handleStates() {
-		if (horizontal == 0 && vertical == 0) 
-			player.State = PlayerState.idle;
-		else player.State = PlayerState.moving;
-
-		player.Anim.SetBool("isMoving", player.State == PlayerState.moving);
-
-		// right mouse click
-		if(Input.GetButton("Aim")) 
-			player.State = PlayerState.aiming;
-		else if(Input.GetButtonUp("Aim"))
-			player.State = PlayerState.idle;
-		player.Anim.SetBool("isAiming", player.State == PlayerState.aiming);
-	}
-
-	private void handleMovement(float horizontal, float vertical)
+	private void HandleMovement()
 	{
-		// slow down animations if aiming and moving
-		if(player.State == PlayerState.aiming) {
-			player.Anim.SetFloat("speedMultiplier", 0.5f);
-			player.Speed = player.DefaultSpeed/2f;
-		}
-		else {
-			player.Anim.SetFloat("speedMultiplier", 1f);
-			player.Speed = player.DefaultSpeed;
-		}
-
 		if (horizontal != 0 && vertical != 0) // Check for diagonal movement
 		{
 			// limit movement speed diagonally, so you move at 70% speed
@@ -69,27 +61,29 @@ public class PlayerMove : MonoBehaviour
 			vertical *= moveLimiter;
 		}
 
-		player.Rb2d.velocity = new Vector2(horizontal * player.Speed, vertical * player.Speed);
+		string velocityY = "VelocityY";
+		string velocityX = "VelocityX";
+
+		animator.SetFloat(velocityY, vertical+animOffset);
+		animator.SetFloat(velocityX, horizontal);
+		
+		player.MovementSystem.SetVertical(vertical);
+		player.MovementSystem.HandleMovement();
+		animOffset = player.MovementSystem.GetOffset();
+
+		rb.velocity = new Vector2(horizontal * player.Speed, vertical * player.Speed);
 	}
 
-	private void flipPlayer(float horizontal)
+	private void FlipPlayer()
 	{
-		if (horizontal > 0 && !player.FacingRight || horizontal < 0 && player.FacingRight)
-		{
-			rotatePlayer();
-		}
-
-		if(player.State == PlayerState.aiming || player.State == PlayerState.moving) {						
-			// Transforming mouse pos to resemble player pos
-    		Vector2 mouseOnScreen = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-			Vector3 playerPos = transform.localPosition;
-
-			if(	mouseOnScreen.x > playerPos.x && !player.FacingRight ||
-				mouseOnScreen.x < playerPos.x && player.FacingRight)				
-				rotatePlayer();
-		}
+		Vector2 mouseOnScreen = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+		Vector3 playerPos = transform.localPosition;
+		
+		if(	mouseOnScreen.x > playerPos.x && !player.FacingRight ||
+		    mouseOnScreen.x < playerPos.x && player.FacingRight)				
+			RotatePlayer();
 	}	
-	private void rotatePlayer() {
+	private void RotatePlayer() {
 		player.FacingRight = !player.FacingRight;
 		transform.Rotate(0f, 180f, 0f);
 	}

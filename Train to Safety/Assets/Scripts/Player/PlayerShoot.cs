@@ -1,43 +1,58 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System;
 using UnityEngine;
 
 public class PlayerShoot : MonoBehaviour
 {
+    [SerializeField] private Transform firePoint;
     private Player player;
-    public Transform firePoint;
-    public GameObject bullet;
+    private ObjectPooler objPooler;
+    private WeaponHandler weaponHandler;
 
+    private event EventHandler OnShoot;
 
     // Start is called before the first frame update
-    void Start()
+    private void Awake()
     {
         player = Player.getPlayerInstance();
-        // player.PlayerWeapon = new Rifle();
+        weaponHandler = WeaponHandler.instance;
+        player.PlayerWeapon = weaponHandler.getCurrentWeapon();
+        OnShoot += attack;
+        objPooler = ObjectPooler.instance;
     }
 
-    // Update is called once per frame
-    void Update()
+    private void Update()
     {
-        Debug.Log(player.State);
-        if(player.State == PlayerState.aiming) {
-            Debug.Log("AIMING");
-            if(Input.GetButtonDown("Fire1")) {
-                shoot();
-            }
+        if(objPooler == null) objPooler = ObjectPooler.instance;
+        
+        // On left mouse click
+        if(Input.GetButtonDown("Fire1"))
+        {
+            OnShoot?.Invoke(this, EventArgs.Empty);
         }
     }
 
-    private void shoot() {
-        Debug.Log("SHOOTING");
-        /* Enemy enemy = hitInfo.transform.GetComponent<Enemy>();
-        if(enemy != null) {
-            enemy.takeDamage(player.PlayerWeapon.damage);
-        }
-        */
-    	Vector2 mouseOnScreen = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        firePoint.LookAt(mouseOnScreen);
+    private void attack(object sender, EventArgs e)
+    {
+        var firePointPos = firePoint.position;
+        
+        Vector3 mouseOnScreen = Utils.GetMouseWorldPosition();
+        Vector3 shootDir = (mouseOnScreen - firePointPos).normalized;
 
-        Instantiate(bullet, firePoint.transform.position, Quaternion.identity);
+        bool canAttack = false;
+
+        // Reduce ammo size
+        player.PlayerWeapon.changeValue(ref canAttack);
+
+        if (canAttack)
+        {
+            Debug.Log("Shoot");
+            BulletRaycast.Shoot(firePointPos, shootDir);
+            Effect();
+        }
+    }
+
+    private void Effect()
+    {
+        objPooler.SpawnFromPool("bullets", firePoint.position, firePoint.rotation);
     }
 }

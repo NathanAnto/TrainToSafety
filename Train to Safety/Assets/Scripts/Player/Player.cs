@@ -6,90 +6,62 @@ using UnityEngine;
 public class Player {
 
     private static Player playerInstance;
-	private GameObject[] bullets { get; set; }
 
-   	private float speed { get; set; }
-	private float defaultSpeed { get; }
-	private int health { get; set; }
+    public float DefaultSpeed { get; private set; }
 	private bool facingRight { get; set; }
     private PlayerState state { get; set; }
-	private Weapon weapon { get; set; }
-	private GameObject bullet { get; set; }
+    private Weapon weapon { get; set; }
+    private HealthSystem healthSystem { get; set; }
+    private MovementSystem movementSystem { get; set; }
 
-	private Rigidbody2D rb { get; set; }
-	private Animator animator { get; set; }
-
-    private Player(float speed) {
-        this.speed = speed;
-        defaultSpeed = speed;
+    private Player(float defaultSpeed)
+    {
+        DefaultSpeed = defaultSpeed;
+        Speed = DefaultSpeed;
     }
 
-    public static Player getPlayerInstance()  {
-        if(playerInstance == null)
-            playerInstance = new Player(2);
-
-        return playerInstance;
+    public static Player getPlayerInstance()
+    {
+        return playerInstance ?? (playerInstance = new Player(5));
     }
 
     // Getters & setters
-    public float Speed {
-        get { return this.speed; }
+    public float Speed { get; set; }
+
+    public HealthSystem HealthSystem {
+        get => healthSystem;
         set {
-            this.speed = value;
+            if(healthSystem == null)
+                healthSystem = value;
         }
     }
-
-    public float DefaultSpeed {
-        get { return this.defaultSpeed; }
-    }    
     
-    public int Health {
-        get { return this.health; }
+    public MovementSystem MovementSystem {
+        get => movementSystem;
         set {
-            this.health = value;
+            if(movementSystem == null)
+                movementSystem = value;
         }
     }
 
     public PlayerState State {
-        get { return this.state; }
-        set {
-            this.state = value;
-        }
+        get => state;
+        set => state = value;
     }
 
-    public bool FacingRight {        
-        get { return this.facingRight; }
-        set {
-            this.facingRight = value;
-        }
-    }
-
-    public Rigidbody2D Rb2d{        
-        get { return this.rb; }
-        set {
-            this.rb = value;
-        }
-    }
-
-    public Animator Anim {        
-        get { return this.animator; }
-        set {
-            this.animator = value;
-        }
+    public bool FacingRight {
+        get => facingRight;
+        set => facingRight = value;
     }
 
     public Weapon PlayerWeapon {
-        get { return this.weapon; }
-        set {
-            this.weapon = value;
-            //this.bullet = Ranged.Bullet;
-        }
+        get => weapon;
+        set => weapon = value;
     }
 }
 
 public enum PlayerState {
     idle,
     moving,
-    aiming,
-    shooting
+    reloading,
 }
