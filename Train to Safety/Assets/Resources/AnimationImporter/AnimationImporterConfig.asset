@@ -12,8 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5d52663f1e64b4a539cad6cb8f3e65ed, type: 3}
   m_Name: AnimationImporterConfig
   m_EditorClassIdentifier: 
-  _animationNamesThatDoNotLoop: []
-  _automaticImporting: 1
+  _animationNamesThatDoNotLoop:
+  - death
+  _automaticImporting: 0
   _spritePixelsPerUnit: 100
   _targetObjectType: 0
   _spriteAlignment: 7

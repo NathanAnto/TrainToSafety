@@ -11,6 +11,7 @@ public class MovementSystem
     public MovementSystem(List<Transform> parts)
     {
         this.parts = new List<SpriteRenderer>();
+        offset = -0.1f;
         
         foreach (var p in parts)
         {

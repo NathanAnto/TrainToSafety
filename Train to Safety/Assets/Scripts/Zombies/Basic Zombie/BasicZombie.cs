@@ -1,27 +1,39 @@
 ﻿using System;
+using System.Collections;
 using UnityEngine;
 
 public class BasicZombie : Zombie
 {
     [SerializeField] private int health;
     [SerializeField] private ZombieState state;
-    private float offset = -0.1f;
-    private string velocityX = "VelocityX";
-    private string velocityY = "VelocityY";
+
+    private void Start()
+    {
+        attackDist = 1.5f;
+        attackRate = 3;
+        speed = 2;
+        range = 10;
+    }
 
     private void Update()
     {
         health = healthSystem.GetHealth();
         state = zombieState;
         playerPos = GameObject.Find("Dwight").transform;
+    }
+    
+    protected override IEnumerator StatePatrol()
+    {
+        return base.StatePatrol();
+    }
+    
+    protected override IEnumerator StateChase()
+    {
+        return base.StateChase();
+    }
 
-        movementSystem.SetVertical(rb.velocity.y + offset);
-        movementSystem.HandleMovement();
-        offset = movementSystem.GetOffset();
-
-        animator.SetFloat(velocityY, rb.velocity.y + offset);
-        animator.SetFloat(velocityX, rb.velocity.x);
-
-        Debug.Log(rb.velocity);
+    protected override IEnumerator StateAttack()
+    {
+        return base.StateAttack();
     }
 }

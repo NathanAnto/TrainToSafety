@@ -10,7 +10,6 @@ public class Ranged : Weapon
     [SerializeField] private int attackRate;
     
     private float nextFire = 0f;
-    private bool canShoot = false;
     
     private int maxAmmo;
     private int maxMagSize;

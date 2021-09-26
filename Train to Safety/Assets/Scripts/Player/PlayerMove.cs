@@ -11,7 +11,7 @@ public class PlayerMove : MonoBehaviour
 	private float vertical;
 	private Rigidbody2D rb;
 	private Animator animator;
-	float animOffset = 0f;
+	private float animOffset;
 
 	// Start is called before the first frame update
 	void Start()
@@ -21,11 +21,12 @@ public class PlayerMove : MonoBehaviour
 		animator = transform.GetChild(0).GetComponent<Animator>(); // Get Animator on Body
 		player.FacingRight = true;
 		player.Speed = player.DefaultSpeed;
+		player.HealthSystem = new HealthSystem(20);
 		player.MovementSystem = new MovementSystem(
 			new List<Transform>() {
-				player.PlayerWeapon.transform,
-				player.PlayerWeapon.transform.GetChild(1).transform,
-				player.PlayerWeapon.transform.GetChild(2).transform
+				player.PlayerWeapon.transform, // Weapon
+				player.PlayerWeapon.transform.GetChild(1).transform, // Hand 1
+				player.PlayerWeapon.transform.GetChild(2).transform // Hand 2
 			});
     }
 
@@ -64,12 +65,12 @@ public class PlayerMove : MonoBehaviour
 		string velocityY = "VelocityY";
 		string velocityX = "VelocityX";
 
-		animator.SetFloat(velocityY, vertical+animOffset);
-		animator.SetFloat(velocityX, horizontal);
-		
 		player.MovementSystem.SetVertical(vertical);
 		player.MovementSystem.HandleMovement();
 		animOffset = player.MovementSystem.GetOffset();
+		
+		animator.SetFloat(velocityX, horizontal);
+		animator.SetFloat(velocityY, vertical+animOffset);
 
 		rb.velocity = new Vector2(horizontal * player.Speed, vertical * player.Speed);
 	}

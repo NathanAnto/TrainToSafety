@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Security.Policy;
 using UnityEngine;
 
 public class Zombie : MonoBehaviour
@@ -10,10 +11,17 @@ public class Zombie : MonoBehaviour
     protected Rigidbody2D rb;
     protected Animator animator;
     protected Transform playerPos;
+    protected Vector2 velocity;
+    protected int damage;
     protected float speed;
-    private int damage;
-    private float attackDist = 5f;
-    
+    protected float animOffset;
+    protected float attackDist;
+    protected float attackRate;
+    protected float range;
+    protected string velocityX = "VelocityX";
+    protected string velocityY = "VelocityY";
+    protected bool facingRight;
+
     protected ZombieState zombieState;
 
     protected ZombieState State
@@ -39,46 +47,139 @@ public class Zombie : MonoBehaviour
         }
     }
 
-    private void Start()
+    private void Awake()
     {
         animator = transform.GetChild(0).GetComponent<Animator>();
         healthSystem = new HealthSystem(20);
         movementSystem = new MovementSystem(new List<Transform>());
-        State = ZombieState.Chase;
         rb = GetComponent<Rigidbody2D>();
+        velocity = new Vector2(0f, 0f);
+        playerPos = GameObject.Find("Dwight").transform;
+        animOffset = -0.1f;
+        facingRight = true;
+
+        State = ZombieState.Chase;
     }
 
-    private IEnumerator StatePatrol()
+    protected virtual IEnumerator StatePatrol()
     {
         while (State == ZombieState.Patrol)
         {
-            if (Vector2.Distance(transform.position, playerPos.position) > attackDist)
-                State = ZombieState.Chase;
-                
+            velocity = Vector2.zero;
+
+            ChangeState();
+            AnimationHandler();
+            
             yield return null;
-        }        
+        }
     }
     
-    private IEnumerator StateChase()
+    protected virtual IEnumerator StateChase()
     {
         while (State == ZombieState.Chase)
         {
-            if (Vector2.Distance(transform.position, playerPos.position) > attackDist)
-            {
-                transform.position = Vector2.MoveTowards(transform.position, playerPos.position, speed * Time.deltaTime);
-                Debug.Log("Moving zombie");
-            }
-            else
-                State = ZombieState.Attack;
+            var tr = transform;
+            playerPos = GameObject.Find("Dwight").transform;
+            Vector3 dir = playerPos.position - tr.position;
+            dir.Normalize();
+            
+            rb.MovePosition(tr.position + (dir * (speed * Time.deltaTime)));
+            if (facingRight)
+                velocity.x = speed;
+            else if (!facingRight)
+                velocity.x = -speed;
+
+            if (playerPos.position.y > tr.position.y)
+                velocity.y = speed;
+            else if(playerPos.position.y < tr.position.y)
+                velocity.y = -speed;
+            
+            ChangeState();
+            AnimationHandler();
 
             yield return null;
-        } 
+        }
     }
-    
-    private IEnumerator StateAttack()
+
+    protected virtual IEnumerator StateAttack()
     {
-        Player.getPlayerInstance().HealthSystem.Damage(damage);
-        yield return null;
+        float nextAttack = 0f;
+        bool canAttack = false;
+        velocity = Vector2.zero;
+
+        while (State == ZombieState.Attack)
+        {
+            canAttack = Time.time > nextAttack;
+        
+            if (canAttack)
+            {
+                Debug.Log("Player hit");
+                nextAttack = Time.time + attackRate;
+                Player.getPlayerInstance().HealthSystem.Damage(damage);
+            }
+            
+            ChangeState();
+            AnimationHandler();
+
+            yield return null;
+        }
+    }
+
+    protected void ChangeState()
+    {
+        if (Vector2.Distance(transform.position, playerPos.position) > attackDist &&
+            Vector2.Distance(transform.position, playerPos.position) < range &&
+            State != ZombieState.Chase)
+        {
+            State = ZombieState.Chase;
+        }
+        else if (Vector2.Distance(transform.position, playerPos.position) > range && State != ZombieState.Patrol)
+        {
+            State = ZombieState.Patrol;
+        }
+        else if (Vector2.Distance(transform.position, playerPos.position) < attackDist && State != ZombieState.Attack)
+        {
+            State = ZombieState.Attack;
+        }
+        
+    }
+
+    protected void AnimationHandler()
+    {
+        float vertical = 0;
+        animOffset = movementSystem.GetOffset();
+
+        if (animOffset.Equals(-0.1f)) vertical = -1f;
+        else if (animOffset.Equals(0.1f)) vertical = 1f;
+
+        if (velocity == Vector2.zero)
+        {
+            movementSystem.SetVertical(animOffset);
+            animator.SetFloat(velocityY, animOffset);
+        }
+        else
+        {
+            movementSystem.SetVertical(velocity.y);
+            animator.SetFloat(velocityY, vertical);
+        }
+
+        movementSystem.HandleMovement();
+        FlipTransform();
+        
+        Debug.Log(animator.GetFloat(velocityY));
+    }
+
+    protected void FlipTransform()
+    {
+        Vector3 pos = transform.localPosition;
+		
+        if(playerPos.position.x > pos.x && !facingRight ||
+           playerPos.position.x < pos.x && facingRight)				
+            RotatePlayer();
+    }	
+    private void RotatePlayer() {
+        facingRight = !facingRight;
+        transform.Rotate(0f, 180f, 0f);
     }
 
     public void TakeDamage(int dmg)
@@ -86,7 +187,6 @@ public class Zombie : MonoBehaviour
         healthSystem.Damage(dmg);
         if (healthSystem.GetHealth() <= 0) Die();
     }
-
 
     private void Die()
     {
