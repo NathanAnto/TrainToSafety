@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using JetBrains.Annotations;
 using UnityEngine;
 
 public class MovementSystem
@@ -7,12 +8,12 @@ public class MovementSystem
     private float offset;
     private List<SpriteRenderer> parts;
     private float verticalMove;
-    
+
     public MovementSystem(List<Transform> parts)
     {
         this.parts = new List<SpriteRenderer>();
         offset = -0.1f;
-        
+
         foreach (var p in parts)
         {
             var partSprite = p.GetComponent<SpriteRenderer>();
@@ -31,6 +32,7 @@ public class MovementSystem
     {
         if (parts.Count > 0)
         {
+
             foreach (var part in parts)
             {
                 // When going up

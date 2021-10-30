@@ -1,25 +1,30 @@
 ﻿using System;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class BasicZombie : Zombie
 {
-    [SerializeField] private int health;
-    [SerializeField] private ZombieState state;
+    [SerializeField] private float bzSpeed = 2;
+    [SerializeField] private float bzAttackDist = 1.5f;
+    [SerializeField] private int bzAttackRate = 3;
+    [SerializeField] private int bzRange = 10;
 
     private void Start()
     {
-        attackDist = 1.5f;
-        attackRate = 3;
-        speed = 2;
-        range = 10;
+        speed = bzSpeed;
+        attackDist = bzAttackDist;
+        attackRate = bzAttackRate;
+        range = bzRange;
     }
 
     private void Update()
     {
-        health = healthSystem.GetHealth();
-        state = zombieState;
         playerPos = GameObject.Find("Dwight").transform;
+        if (speed < bzSpeed) {
+            speed += .1f;
+        }
+        else if(speed >= bzSpeed) speed = bzSpeed;
     }
     
     protected override IEnumerator StatePatrol()

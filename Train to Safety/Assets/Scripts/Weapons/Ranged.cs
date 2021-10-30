@@ -16,6 +16,7 @@ public class Ranged : Weapon
     private Animator animator;
     private Player player;
     private WeaponHandler weaponHandler;
+    private int loopCount;
 
     private void Start() {
         player = Player.getPlayerInstance();
@@ -37,22 +38,46 @@ public class Ranged : Weapon
         {
             animator.SetTrigger("Shoot");
             nextFire = Time.time + attackRate;
-            ammo--;
             magSize--;
             if(magSize <= 0) {
-                player.State = PlayerState.reloading;
-                Debug.Log("Reloading...");
                 magSize = maxMagSize;
+                ammo -= maxMagSize; 
+                StartCoroutine(PlayReloadAnim(maxMagSize));
+                Debug.Log("Reloading...");
             }
             else if(ammo <= 0) {
                 Debug.Log("Switching weapon...");
-                weaponHandler.selectNextWeapon();
-                Debug.Log($"Weapon {weaponHandler.getCurrentWeapon().name}");
+                // weaponHandler.selectNextWeapon();
+                // Debug.Log($"Weapon {weaponHandler.getCurrentWeapon().name}");
                 setMaxAmmo();
             }
         }
     }
 
+    public override void PlayReload()
+    {
+        if(magSize != maxMagSize)
+            StartCoroutine(PlayReloadAnim(maxMagSize-magSize));
+    }
+    
+    private IEnumerator PlayReloadAnim(int reloadCount)
+    {
+        animator.SetBool("Reloading", true);
+        while (loopCount < reloadCount)
+        {
+            yield return null;
+        }
+        magSize = maxMagSize;
+        animator.SetBool("Reloading", false);
+        loopCount = 0;
+    }
+
+    public void IncrementLoopCount()
+    {
+        loopCount++;
+        Debug.Log("RELOAD LOOP COUNT " + loopCount);
+    }
+    
     private void setMaxAmmo() {
         ammo = maxAmmo;
     }

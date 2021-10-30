@@ -130,6 +130,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 3193287755685106018, guid: 2250fc60092d9484693fa50e72303830, type: 3}
+      propertyPath: m_BodyType
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3193287757434551708, guid: 2250fc60092d9484693fa50e72303830, type: 3}
       propertyPath: m_Name
       value: BasicZombie
@@ -181,6 +185,10 @@ PrefabInstance:
     - target: {fileID: 3193287757434551711, guid: 2250fc60092d9484693fa50e72303830, type: 3}
       propertyPath: state
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3193287757434551711, guid: 2250fc60092d9484693fa50e72303830, type: 3}
+      propertyPath: bzSpeed
+      value: 3
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2250fc60092d9484693fa50e72303830, type: 3}
@@ -365,17 +373,21 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1867415579111670171, guid: fa4ec67d5352bfd41be8b99cc3828027, type: 3}
-      propertyPath: m_Constraints
-      value: 4
-      objectReference: {fileID: 0}
     - target: {fileID: 2174294349298892386, guid: fa4ec67d5352bfd41be8b99cc3828027, type: 3}
       propertyPath: m_Name
       value: Dwight
       objectReference: {fileID: 0}
-    - target: {fileID: 6020704640312189205, guid: fa4ec67d5352bfd41be8b99cc3828027, type: 3}
-      propertyPath: m_Name
-      value: Aim
+    - target: {fileID: 6596885574058884420, guid: fa4ec67d5352bfd41be8b99cc3828027, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0.037999965
+      objectReference: {fileID: 0}
+    - target: {fileID: 6596885574058884420, guid: fa4ec67d5352bfd41be8b99cc3828027, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.007
+      objectReference: {fileID: 0}
+    - target: {fileID: 7631733040736405945, guid: fa4ec67d5352bfd41be8b99cc3828027, type: 3}
+      propertyPath: magSize
+      value: 4
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: fa4ec67d5352bfd41be8b99cc3828027, type: 3}

@@ -54,7 +54,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 0
+  m_Constraints: 4
 --- !u!114 &1867415579111670169
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -79,7 +79,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3ff3508159184e04a9e59bddde9c9a4f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  firePoint: {fileID: 9090492929462581172}
 --- !u!1 &6020704640312189205
 GameObject:
   m_ObjectHideFlags: 0
@@ -92,7 +91,7 @@ GameObject:
   - component: {fileID: 1138621888}
   - component: {fileID: 1332843759}
   m_Layer: 0
-  m_Name: GunRotation
+  m_Name: Aim
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -109,7 +108,7 @@ Transform:
   m_LocalPosition: {x: -0.0045000077, y: -0.00020000935, z: 0}
   m_LocalScale: {x: 0.6, y: 0.6, z: 1}
   m_Children:
-  - {fileID: 9090492928460916567}
+  - {fileID: 7631733040525862370}
   - {fileID: 2670879855967135615}
   m_Father: {fileID: 7030796220761332709}
   m_RootOrder: 0
@@ -241,28 +240,16 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!1001 &502338944743832040
+--- !u!1001 &1240211150658214749
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
     m_TransformParent: {fileID: 4239969060830474969}
     m_Modifications:
-    - target: {fileID: 1012969755867252607, guid: 3c3ca4cdaf3c7e543bd289e67654f85e, type: 3}
-      propertyPath: m_SortingOrder
-      value: 23
-      objectReference: {fileID: 0}
-    - target: {fileID: 4938582968598121256, guid: 3c3ca4cdaf3c7e543bd289e67654f85e, type: 3}
-      propertyPath: m_SortingOrder
-      value: 23
-      objectReference: {fileID: 0}
     - target: {fileID: 8709752482153234110, guid: 3c3ca4cdaf3c7e543bd289e67654f85e, type: 3}
       propertyPath: m_Name
       value: Shotgun
-      objectReference: {fileID: 0}
-    - target: {fileID: 8709752482153234110, guid: 3c3ca4cdaf3c7e543bd289e67654f85e, type: 3}
-      propertyPath: m_IsActive
-      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8709752482153234111, guid: 3c3ca4cdaf3c7e543bd289e67654f85e, type: 3}
       propertyPath: m_LocalPosition.x
@@ -310,15 +297,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3c3ca4cdaf3c7e543bd289e67654f85e, type: 3}
---- !u!4 &9090492928460916567 stripped
+--- !u!4 &7631733040525862370 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8709752482153234111, guid: 3c3ca4cdaf3c7e543bd289e67654f85e, type: 3}
-  m_PrefabInstance: {fileID: 502338944743832040}
-  m_PrefabAsset: {fileID: 0}
---- !u!4 &9090492929462581172 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 8709752480933465692, guid: 3c3ca4cdaf3c7e543bd289e67654f85e, type: 3}
-  m_PrefabInstance: {fileID: 502338944743832040}
+  m_PrefabInstance: {fileID: 1240211150658214749}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &7082671174235942374
 PrefabInstance:
@@ -327,22 +309,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 4239969060830474969}
     m_Modifications:
-    - target: {fileID: 2859670754789775257, guid: 6d931daa938eb914bbf4f3635b686129, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2859670754789775257, guid: 6d931daa938eb914bbf4f3635b686129, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0.036
-      objectReference: {fileID: 0}
-    - target: {fileID: 4791579548452361454, guid: 6d931daa938eb914bbf4f3635b686129, type: 3}
-      propertyPath: m_Enabled
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4791579548452361454, guid: 6d931daa938eb914bbf4f3635b686129, type: 3}
-      propertyPath: m_Controller
-      value: 
-      objectReference: {fileID: 9100000, guid: 4bd641bad68dafe408dbfca72324ca95, type: 2}
     - target: {fileID: 5141541752935647895, guid: 6d931daa938eb914bbf4f3635b686129, type: 3}
       propertyPath: m_Name
       value: Pistol

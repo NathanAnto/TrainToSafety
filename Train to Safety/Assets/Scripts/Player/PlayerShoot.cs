@@ -3,12 +3,10 @@ using UnityEngine;
 
 public class PlayerShoot : MonoBehaviour
 {
-    [SerializeField] private Transform firePoint;
     private Player player;
     private ObjectPooler objPooler;
     private WeaponHandler weaponHandler;
-
-    private event EventHandler OnShoot;
+    private Transform firePoint;
 
     // Start is called before the first frame update
     private void Awake()
@@ -16,8 +14,8 @@ public class PlayerShoot : MonoBehaviour
         player = Player.getPlayerInstance();
         weaponHandler = WeaponHandler.instance;
         player.PlayerWeapon = weaponHandler.getCurrentWeapon();
-        OnShoot += attack;
         objPooler = ObjectPooler.instance;
+        firePoint = player.PlayerWeapon.transform.GetChild(0).transform;
     }
 
     private void Update()
@@ -26,12 +24,12 @@ public class PlayerShoot : MonoBehaviour
         
         // On left mouse click
         if(Input.GetButtonDown("Fire1"))
-        {
-            OnShoot?.Invoke(this, EventArgs.Empty);
-        }
+            Attack();
+        if (Input.GetKeyDown(KeyCode.R))
+            Reload();
     }
 
-    private void attack(object sender, EventArgs e)
+    private void Attack()
     {
         var firePointPos = firePoint.position;
         
@@ -49,6 +47,11 @@ public class PlayerShoot : MonoBehaviour
             BulletRaycast.Shoot(firePointPos, shootDir);
             Effect();
         }
+    }
+
+    private void Reload()
+    {
+        player.PlayerWeapon.PlayReload();
     }
 
     private void Effect()

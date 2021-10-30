@@ -52,8 +52,8 @@ public class Zombie : MonoBehaviour
         animator = transform.GetChild(0).GetComponent<Animator>();
         healthSystem = new HealthSystem(20);
         movementSystem = new MovementSystem(new List<Transform>());
-        rb = GetComponent<Rigidbody2D>();
         velocity = new Vector2(0f, 0f);
+        rb = GetComponent<Rigidbody2D>();
         playerPos = GameObject.Find("Dwight").transform;
         animOffset = -0.1f;
         facingRight = true;
@@ -104,12 +104,12 @@ public class Zombie : MonoBehaviour
     protected virtual IEnumerator StateAttack()
     {
         float nextAttack = 0f;
-        bool canAttack = false;
         velocity = Vector2.zero;
 
         while (State == ZombieState.Attack)
         {
-            canAttack = Time.time > nextAttack;
+            var canAttack = Time.time > nextAttack;
+            speed = 0;
         
             if (canAttack)
             {
@@ -165,8 +165,6 @@ public class Zombie : MonoBehaviour
 
         movementSystem.HandleMovement();
         FlipTransform();
-        
-        Debug.Log(animator.GetFloat(velocityY));
     }
 
     protected void FlipTransform()
@@ -184,6 +182,7 @@ public class Zombie : MonoBehaviour
 
     public void TakeDamage(int dmg)
     {
+        speed = 0;
         healthSystem.Damage(dmg);
         if (healthSystem.GetHealth() <= 0) Die();
     }

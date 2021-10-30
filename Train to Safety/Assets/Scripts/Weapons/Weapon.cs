@@ -21,4 +21,6 @@ public abstract class Weapon : MonoBehaviour
     }
 
     public abstract void changeValue(ref bool canAttack);
+    public virtual void PlayReload() { }
+    
 }

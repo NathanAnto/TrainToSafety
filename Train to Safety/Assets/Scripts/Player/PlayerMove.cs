@@ -38,8 +38,7 @@ public class PlayerMove : MonoBehaviour
 		FlipPlayer();
 	}
 
-
-    // Fixed Update is called 50 times per second
+	// Fixed Update is called 50 times per second
     void FixedUpdate()
     {
 		HandleStates();
@@ -62,15 +61,15 @@ public class PlayerMove : MonoBehaviour
 			vertical *= moveLimiter;
 		}
 
-		string velocityY = "VelocityY";
-		string velocityX = "VelocityX";
+		const string VELOCITY_Y = "VelocityY";
+		const string VELOCITY_X = "VelocityX";
 
 		player.MovementSystem.SetVertical(vertical);
 		player.MovementSystem.HandleMovement();
 		animOffset = player.MovementSystem.GetOffset();
 		
-		animator.SetFloat(velocityX, horizontal);
-		animator.SetFloat(velocityY, vertical+animOffset);
+		animator.SetFloat(VELOCITY_X, horizontal);
+		animator.SetFloat(VELOCITY_Y, vertical+animOffset);
 
 		rb.velocity = new Vector2(horizontal * player.Speed, vertical * player.Speed);
 	}
