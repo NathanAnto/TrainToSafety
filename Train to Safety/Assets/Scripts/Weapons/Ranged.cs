@@ -9,20 +9,15 @@ public class Ranged : Weapon
     [SerializeField] private int damage;
     [SerializeField] private int attackRate;
     
-    private float nextFire = 0f;
-    
+    private float nextFire;
     private int maxAmmo;
     private int maxMagSize;
     private Animator animator;
-    private Player player;
-    private WeaponHandler weaponHandler;
     private int loopCount;
 
     private void Start() {
-        player = Player.getPlayerInstance();
         maxAmmo = ammo;
         maxMagSize = magSize;
-        weaponHandler = WeaponHandler.instance;
         
         Damage = damage;
         AttackRate = attackRate;
@@ -34,8 +29,7 @@ public class Ranged : Weapon
         canAttack = Time.time > nextFire;
         
         // On left mouse click
-        if (canAttack) // Input.GetButtonDown("Fire1")
-        {
+        if (canAttack) {
             animator.SetTrigger("Shoot");
             nextFire = Time.time + attackRate;
             magSize--;
@@ -44,8 +38,7 @@ public class Ranged : Weapon
                 ammo -= maxMagSize; 
                 StartCoroutine(PlayReloadAnim(maxMagSize));
                 Debug.Log("Reloading...");
-            }
-            else if(ammo <= 0) {
+            } else if(ammo <= 0) {
                 Debug.Log("Switching weapon...");
                 // weaponHandler.selectNextWeapon();
                 // Debug.Log($"Weapon {weaponHandler.getCurrentWeapon().name}");

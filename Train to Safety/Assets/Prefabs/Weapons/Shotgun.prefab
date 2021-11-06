@@ -212,7 +212,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ammo: 60
-  magSize: 16
+  magSize: 4
   damage: 5
   attackRate: 2
 --- !u!95 &916612427

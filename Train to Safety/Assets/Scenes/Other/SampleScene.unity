@@ -377,17 +377,13 @@ PrefabInstance:
       propertyPath: m_Name
       value: Dwight
       objectReference: {fileID: 0}
-    - target: {fileID: 6596885574058884420, guid: fa4ec67d5352bfd41be8b99cc3828027, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0.037999965
+    - target: {fileID: 6822962680847929702, guid: fa4ec67d5352bfd41be8b99cc3828027, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 6596885574058884420, guid: fa4ec67d5352bfd41be8b99cc3828027, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: -0.007
-      objectReference: {fileID: 0}
-    - target: {fileID: 7631733040736405945, guid: fa4ec67d5352bfd41be8b99cc3828027, type: 3}
-      propertyPath: magSize
-      value: 4
+    - target: {fileID: 7631733040525862371, guid: fa4ec67d5352bfd41be8b99cc3828027, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: fa4ec67d5352bfd41be8b99cc3828027, type: 3}

@@ -9,13 +9,11 @@ public static class BulletRaycast
         Debug.DrawLine(shootPos, shootDir, Color.yellow, .1f);
         RaycastHit2D hit = Physics2D.Raycast(shootPos, shootDir);
 
-        Weapon weapon = WeaponHandler.instance.getCurrentWeapon();
+        Weapon weapon = WeaponHandler.instance.GETCurrentWeapon();
 
-        if (hit.collider != null)
-        {
+        if (hit.collider != null) {
             Zombie hitZombie = hit.collider.GetComponent<Zombie>();
-            if (hitZombie != null)
-            {
+            if (hitZombie != null) {
                 hitZombie.TakeDamage(weapon.Damage);
             }
         }

@@ -7,7 +7,7 @@ using UnityEngine;
 public class Zombie : MonoBehaviour
 {
     protected HealthSystem healthSystem;
-    protected MovementSystem movementSystem;
+    protected PlayerSpriteRenderer playerSpriteRenderer;
     protected Rigidbody2D rb;
     protected Animator animator;
     protected Transform playerPos;
@@ -51,7 +51,7 @@ public class Zombie : MonoBehaviour
     {
         animator = transform.GetChild(0).GetComponent<Animator>();
         healthSystem = new HealthSystem(20);
-        movementSystem = new MovementSystem(new List<Transform>());
+        playerSpriteRenderer = new PlayerSpriteRenderer(facingRight, new List<Transform>());
         velocity = new Vector2(0f, 0f);
         rb = GetComponent<Rigidbody2D>();
         playerPos = GameObject.Find("Dwight").transform;
@@ -115,7 +115,7 @@ public class Zombie : MonoBehaviour
             {
                 Debug.Log("Player hit");
                 nextAttack = Time.time + attackRate;
-                Player.getPlayerInstance().HealthSystem.Damage(damage);
+                // Player.getPlayerInstance().HealthSystem.Damage(damage);
             }
             
             ChangeState();
@@ -147,23 +147,22 @@ public class Zombie : MonoBehaviour
     protected void AnimationHandler()
     {
         float vertical = 0;
-        animOffset = movementSystem.GetOffset();
+        animOffset = playerSpriteRenderer.GetOffset();
 
         if (animOffset.Equals(-0.1f)) vertical = -1f;
         else if (animOffset.Equals(0.1f)) vertical = 1f;
 
         if (velocity == Vector2.zero)
         {
-            movementSystem.SetVertical(animOffset);
             animator.SetFloat(velocityY, animOffset);
+            playerSpriteRenderer.SortSprites(animOffset);
         }
         else
         {
-            movementSystem.SetVertical(velocity.y);
             animator.SetFloat(velocityY, vertical);
+            playerSpriteRenderer.SortSprites(velocity.y);
         }
 
-        movementSystem.HandleMovement();
         FlipTransform();
     }
 

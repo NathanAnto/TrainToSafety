@@ -2,89 +2,62 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class PlayerMove : MonoBehaviour
 {
-	private Player player;
-	private float moveLimiter = 0.7f;
-	private float horizontal;
-	private float vertical;
-	private Rigidbody2D rb;
-	private Animator animator;
-	private float animOffset;
+	public float defaultSpeed;
 
+	private Animator animator;
+	private Rigidbody2D rb;
+	public PlayerSpriteRenderer playerSpriteRenderer;
+	private float animOffset;
+	private float speed;
+	private float h, v;
+	
+	private const float MOVELIMITER = 0.7f;
+	private static readonly int VelocityX = Animator.StringToHash("VelocityX");
+	private static readonly int VelocityY = Animator.StringToHash("VelocityY");
+	
 	// Start is called before the first frame update
-	void Start()
-    {
-		player = Player.getPlayerInstance(); // Get player singleton
-		rb = GetComponent<Rigidbody2D>();
+	void Start() {
 		animator = transform.GetChild(0).GetComponent<Animator>(); // Get Animator on Body
-		player.FacingRight = true;
-		player.Speed = player.DefaultSpeed;
-		player.HealthSystem = new HealthSystem(20);
-		player.MovementSystem = new MovementSystem(
+		rb = GetComponent<Rigidbody2D>();
+		speed = defaultSpeed;
+		
+		var playerWeapon = WeaponHandler.instance.GETCurrentWeapon().gameObject;
+		playerSpriteRenderer = new PlayerSpriteRenderer(true,
 			new List<Transform>() {
-				player.PlayerWeapon.transform, // Weapon
-				player.PlayerWeapon.transform.GetChild(1).transform, // Hand 1
-				player.PlayerWeapon.transform.GetChild(2).transform // Hand 2
+				playerWeapon.transform, // Weapon
+				playerWeapon.transform.GetChild(1).transform, // Hand 1
+				playerWeapon.transform.GetChild(2).transform // Hand 2
 			});
     }
 
-	void Update()
-	{
-		// input
-		horizontal = Input.GetAxis("Horizontal");
-		vertical = Input.GetAxis("Vertical");
-		FlipPlayer();
-	}
+	private void Update() {
+		h = Input.GetAxis("Horizontal");
+		v = Input.GetAxis("Vertical");
 
-	// Fixed Update is called 50 times per second
-    void FixedUpdate()
-    {
-		HandleStates();
 		HandleMovement();
-    }
-
-	private void HandleStates() {
-		if (horizontal == 0 && vertical == 0)
-			player.State = PlayerState.idle;
-		else
-			player.State = PlayerState.moving;
 	}
 
-	private void HandleMovement()
-	{
-		if (horizontal != 0 && vertical != 0) // Check for diagonal movement
-		{
+	private void HandleMovement() {
+		// Check for diagonal movement
+		if (h != 0 && v != 0) {
 			// limit movement speed diagonally, so you move at 70% speed
-			horizontal *= moveLimiter;
-			vertical *= moveLimiter;
+			h *= MOVELIMITER;
+			v *= MOVELIMITER;
 		}
-
-		const string VELOCITY_Y = "VelocityY";
-		const string VELOCITY_X = "VelocityX";
-
-		player.MovementSystem.SetVertical(vertical);
-		player.MovementSystem.HandleMovement();
-		animOffset = player.MovementSystem.GetOffset();
 		
-		animator.SetFloat(VELOCITY_X, horizontal);
-		animator.SetFloat(VELOCITY_Y, vertical+animOffset);
-
-		rb.velocity = new Vector2(horizontal * player.Speed, vertical * player.Speed);
+		playerSpriteRenderer.SortSprites(v);
+		playerSpriteRenderer.FlipPlayer(transform);
+		HandleAnimations();
+		rb.velocity = new Vector2(h * speed, v * speed);
 	}
 
-	private void FlipPlayer()
-	{
-		Vector2 mouseOnScreen = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-		Vector3 playerPos = transform.localPosition;
-		
-		if(	mouseOnScreen.x > playerPos.x && !player.FacingRight ||
-		    mouseOnScreen.x < playerPos.x && player.FacingRight)				
-			RotatePlayer();
-	}	
-	private void RotatePlayer() {
-		player.FacingRight = !player.FacingRight;
-		transform.Rotate(0f, 180f, 0f);
+	private void HandleAnimations() {
+		animOffset = playerSpriteRenderer.GetOffset();
+		animator.SetFloat(VelocityX, h);
+		animator.SetFloat(VelocityY, v+animOffset);
 	}
 }

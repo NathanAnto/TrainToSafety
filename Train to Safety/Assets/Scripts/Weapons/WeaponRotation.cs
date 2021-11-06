@@ -5,32 +5,23 @@ using UnityEngine;
 
 public class WeaponRotation : MonoBehaviour
 {
-    private Player player;
-    private Transform weaponTransform;
-    
-    private void Start()
-    {
-        player = Player.getPlayerInstance();
-        player.FacingRight = true;
-        weaponTransform = transform.GetChild(0).transform;
-    }
-
     // Update is called once per frame
     void Update()
     {
-        Vector3 mousePos = Utils.GetMouseWorldPosition();
-        Vector3 aimDirection = (mousePos - transform.position).normalized;
-        float angle = Mathf.Atan2(aimDirection.y, aimDirection.x) * Mathf.Rad2Deg;
+        var tr = transform;
+        var mousePos = Utils.GetMouseWorldPosition();
+        var aimDirection = (mousePos - tr.position).normalized;
+        var angle = Mathf.Atan2(aimDirection.y, aimDirection.x) * Mathf.Rad2Deg;
 
-        transform.eulerAngles = new Vector3(0,0,angle);
+        tr.eulerAngles = new Vector3(0,0,angle);
         
-        Vector3 localScale = transform.localScale;
+        var localScale = tr.localScale;
         
         if (angle > 90 || angle < -90) 
             localScale.y = -localScale.x;
         else 
             localScale.y = localScale.x;
 
-        transform.localScale = localScale;
+        tr.localScale = localScale;
     }
 }
