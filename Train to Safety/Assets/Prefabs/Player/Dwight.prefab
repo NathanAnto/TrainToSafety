@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 467220171}
   m_Layer: 0
   m_Name: Dwight
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -68,7 +68,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   defaultSpeed: 5
-  playerWeapon: {fileID: 7631733040525862371}
 --- !u!114 &467220171
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -81,7 +80,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3ff3508159184e04a9e59bddde9c9a4f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  firePoint: {fileID: 7631733041696331009}
 --- !u!1 &6020704640312189205
 GameObject:
   m_ObjectHideFlags: 0
@@ -301,19 +299,9 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3c3ca4cdaf3c7e543bd289e67654f85e, type: 3}
---- !u!1 &7631733040525862371 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 8709752482153234110, guid: 3c3ca4cdaf3c7e543bd289e67654f85e, type: 3}
-  m_PrefabInstance: {fileID: 1240211150658214749}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &7631733040525862370 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8709752482153234111, guid: 3c3ca4cdaf3c7e543bd289e67654f85e, type: 3}
-  m_PrefabInstance: {fileID: 1240211150658214749}
-  m_PrefabAsset: {fileID: 0}
---- !u!4 &7631733041696331009 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 8709752480933465692, guid: 3c3ca4cdaf3c7e543bd289e67654f85e, type: 3}
   m_PrefabInstance: {fileID: 1240211150658214749}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1867415578795416561

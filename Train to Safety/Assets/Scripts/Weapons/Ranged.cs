@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using JetBrains.Annotations;
 using UnityEngine;
 
 public class Ranged : Weapon
@@ -13,12 +14,12 @@ public class Ranged : Weapon
     private int maxAmmo;
     private int maxMagSize;
     private Animator animator;
-    private int loopCount;
+    private static readonly int Reloading = Animator.StringToHash("Reloading");
+    private static readonly int CanShoot = Animator.StringToHash("CanShoot");
 
     private void Start() {
         maxAmmo = ammo;
         maxMagSize = magSize;
-        
         Damage = damage;
         AttackRate = attackRate;
         animator = GetComponent<Animator>();
@@ -26,6 +27,7 @@ public class Ranged : Weapon
 
     public override void changeValue(ref bool canAttack)
     {
+        if (animator.GetBool(Reloading) && !animator.GetBool(CanShoot)) return;
         canAttack = Time.time > nextFire;
         
         // On left mouse click
@@ -34,44 +36,46 @@ public class Ranged : Weapon
             nextFire = Time.time + attackRate;
             magSize--;
             if(magSize <= 0) {
-                magSize = maxMagSize;
                 ammo -= maxMagSize; 
-                StartCoroutine(PlayReloadAnim(maxMagSize));
-                Debug.Log("Reloading...");
+                PlayReload();
             } else if(ammo <= 0) {
                 Debug.Log("Switching weapon...");
                 // weaponHandler.selectNextWeapon();
                 // Debug.Log($"Weapon {weaponHandler.getCurrentWeapon().name}");
-                setMaxAmmo();
+                SetMaxAmmo();
             }
         }
     }
 
     public override void PlayReload()
     {
-        if(magSize != maxMagSize)
-            StartCoroutine(PlayReloadAnim(maxMagSize-magSize));
-    }
-    
-    private IEnumerator PlayReloadAnim(int reloadCount)
-    {
-        animator.SetBool("Reloading", true);
-        while (loopCount < reloadCount)
-        {
-            yield return null;
+        if (!animator.GetBool(Reloading) && magSize < maxMagSize) {
+            Debug.Log("Starting reload");
+            animator.SetBool(Reloading, true);
+            animator.SetBool(CanShoot, false);
         }
-        magSize = maxMagSize;
-        animator.SetBool("Reloading", false);
-        loopCount = 0;
     }
 
-    public void IncrementLoopCount()
+    private void IncrementReloadCount()
     {
-        loopCount++;
-        Debug.Log("RELOAD LOOP COUNT " + loopCount);
+        magSize++;
+        // If can reload
+        if (magSize < maxMagSize) {
+            animator.Play("Shotgun_reload");
+        } else {
+            Debug.Log("Reloaded full mag");
+            animator.Play("Shotgun_action");
+            animator.SetBool(Reloading, false);
+        }
+    }
+
+    // TODO: Activate shoot when after reload and action animation
+    private void ActivateShoot() {
+        Debug.Log("Reactivating shooting");
+        animator.SetBool(CanShoot, true);
     }
     
-    private void setMaxAmmo() {
+    private void SetMaxAmmo() {
         ammo = maxAmmo;
     }
 }

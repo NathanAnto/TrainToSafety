@@ -26,12 +26,7 @@ public class PlayerMove : MonoBehaviour
 		speed = defaultSpeed;
 		
 		var playerWeapon = WeaponHandler.instance.GETCurrentWeapon().gameObject;
-		playerSpriteRenderer = new PlayerSpriteRenderer(true,
-			new List<Transform>() {
-				playerWeapon.transform, // Weapon
-				playerWeapon.transform.GetChild(1).transform, // Hand 1
-				playerWeapon.transform.GetChild(2).transform // Hand 2
-			});
+		playerSpriteRenderer = new PlayerSpriteRenderer(true, playerWeapon.transform);
     }
 
 	private void Update() {

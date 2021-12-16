@@ -5,23 +5,15 @@ using UnityEngine;
 
 public class PlayerSpriteRenderer
 {
-    private List<SpriteRenderer> parts;
+    private Transform weaponTransform;
     private float offset;
     private float verticalMove;
     private bool facingRight;
     private WeaponListener weaponListener;
 
-    public PlayerSpriteRenderer(bool facingRight, List<Transform> parts)
-    {
+    public PlayerSpriteRenderer(bool facingRight, Transform wt = null) {
         this.facingRight = facingRight;
-
-        this.parts = new List<SpriteRenderer>();
-        offset = -0.1f;
-
-        foreach (var p in parts) {
-            var partSprite = p.GetComponent<SpriteRenderer>();
-            this.parts.Add(partSprite);
-        }
+        ResetRenderers(wt);
     }
 
     public float GetOffset() => offset;
@@ -32,45 +24,42 @@ public class PlayerSpriteRenderer
     /// </summary>
     public void SortSprites(float v) {
         verticalMove = v;
-        if (parts.Count > 0) {
-            foreach (var part in parts) {
-                var weapon = part.GetComponent<Weapon>();
+        if(verticalMove > 0)
+            weaponTransform.GetComponent<SpriteRenderer>().sortingOrder = 18; // Set weapon behind player body
+        else if(verticalMove < 0)
+            weaponTransform.GetComponent<SpriteRenderer>().sortingOrder = 22; // Set weapon in front of player body
+
+        if (weaponTransform == null) return;
+        // For hands to appear behind player when
+        // going up and in front when going down
+        foreach (Transform child in weaponTransform) {
+            var sprite = child.GetComponent<SpriteRenderer>();
+            if (sprite != null) {
                 // When going up
                 if (verticalMove > 0) {
                     offset = 0.1f;
-                    part.sortingOrder = weapon != null ? 18 : 19;
+                    sprite.sortingOrder = 19; // Set hand behind player body
                 }
                 // When going down
                 else if (verticalMove < 0) {
                     offset = -0.1f;
-                    part.sortingOrder = weapon != null ? 22 : 23;
+                    sprite.sortingOrder = 23; // Set hand in front of player body
                 }
-            }
-        } else {
-            if (verticalMove > 0) {
-                offset = 0.1f;
-            } else if (verticalMove < 0) {
-                offset = -0.1f;
             }
         }
     }
 
-    public void ResetRenderers(List<Transform> transforms)
-    {
-        parts = new List<SpriteRenderer>();
-        
-        foreach (var t in transforms) {
-            var partSprite = t.GetComponent<SpriteRenderer>();
-            parts.Add(partSprite);
-        }
+    public void ResetRenderers(Transform wt) {
+        weaponTransform = wt;
+        SortSprites(verticalMove+offset);
     }
     
     public void FlipPlayer(Transform tr) {
-        Vector2 mouseOnScreen = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        Vector3 playerPos = tr.localPosition;
+        var mouseOnScreen = (Vector2)Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        var pos = tr.localPosition;
 		
-        if(	mouseOnScreen.x > playerPos.x && !facingRight ||
-            mouseOnScreen.x < playerPos.x && facingRight)				
+        if(	mouseOnScreen.x > pos.x && !facingRight || 
+            mouseOnScreen.x < pos.x && facingRight)				
             RotatePlayer(tr);
     }	
 	

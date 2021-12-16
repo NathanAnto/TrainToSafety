@@ -1,21 +1,24 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class InputManager : MonoBehaviour
 {
-    public Vector2 Movement { get; private set; }
-    
-    // Start is called before the first frame update
-    void Awake() {
-        Movement = Vector2.zero;
-    }
+    public event Action OnShoot;
+    public event Action OnReload;
+    public event Action OnSwitch;
 
     // Update is called once per frame
     void Update() {
-        Movement = new Vector2 {
-            x = Input.GetAxis("Horizontal"),
-            y = Input.GetAxis("Vertical")
-        }.normalized;
+        if (Input.GetButtonDown("Fire1")) {
+            OnShoot?.Invoke();
+        }
+        if (Input.GetKeyDown(KeyCode.R)) {
+            OnReload?.Invoke();
+        }
+        if (Input.GetKeyDown(KeyCode.Q)) {
+            OnSwitch?.Invoke();
+        }
     }
 }

@@ -130,10 +130,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 3193287755685106018, guid: 2250fc60092d9484693fa50e72303830, type: 3}
-      propertyPath: m_BodyType
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 3193287757434551708, guid: 2250fc60092d9484693fa50e72303830, type: 3}
       propertyPath: m_Name
       value: BasicZombie
@@ -183,12 +179,8 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3193287757434551711, guid: 2250fc60092d9484693fa50e72303830, type: 3}
-      propertyPath: state
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3193287757434551711, guid: 2250fc60092d9484693fa50e72303830, type: 3}
-      propertyPath: bzSpeed
-      value: 3
+      propertyPath: m_Enabled
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2250fc60092d9484693fa50e72303830, type: 3}
@@ -322,6 +314,23 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &2094405208 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2174294349298892386, guid: fa4ec67d5352bfd41be8b99cc3828027, type: 3}
+  m_PrefabInstance: {fileID: 1867415579111670166}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &2094405209
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2094405208}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ccb0e9a938d110c4d87863eb1cbb1471, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1867415579111670166
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -377,13 +386,9 @@ PrefabInstance:
       propertyPath: m_Name
       value: Dwight
       objectReference: {fileID: 0}
-    - target: {fileID: 6822962680847929702, guid: fa4ec67d5352bfd41be8b99cc3828027, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7631733040525862371, guid: fa4ec67d5352bfd41be8b99cc3828027, type: 3}
-      propertyPath: m_IsActive
-      value: 0
+    - target: {fileID: 7631733040736405945, guid: fa4ec67d5352bfd41be8b99cc3828027, type: 3}
+      propertyPath: attackRate
+      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: fa4ec67d5352bfd41be8b99cc3828027, type: 3}

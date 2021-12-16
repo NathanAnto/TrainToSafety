@@ -7,37 +7,31 @@ public class PlayerShoot : MonoBehaviour
     private Transform firePoint;
     private Weapon playerWeapon;
     private WeaponHandler weaponHandler;
+    private InputManager inputManager;
 
     // Start is called before the first frame update
     private void Start() {
         weaponHandler = WeaponHandler.instance;
         playerWeapon = weaponHandler.GETCurrentWeapon();
         firePoint = playerWeapon.transform.GetChild(0).transform;
+        inputManager = GetComponent<InputManager>();
     }
 
     private void Update() {
-        CheckShootInput();
-    }
-
-    private void CheckShootInput()
-    {
         // On left mouse click
-        if(Input.GetButtonDown("Fire1"))
-            Attack();
+        inputManager.OnShoot += Attack;
+        
         // On 'R' button pressed
-        if (Input.GetKeyDown(KeyCode.R))
-            Reload();
+        inputManager.OnReload += Reload;
+        
         // Change weapon tester
-        if (Input.GetKeyDown(KeyCode.Q))
-        {
-            playerWeapon = weaponHandler.SelectNextWeapon();
-            GetComponent<PlayerMove>().playerSpriteRenderer.ResetRenderers(
-                new List<Transform>(){
-                    playerWeapon.transform, // Weapon
-                    playerWeapon.transform.GetChild(1).transform, // Hand 1
-                    playerWeapon.transform.GetChild(2).transform // Hand 2
-                });
-        }
+        inputManager.OnSwitch += SwitchWeapon; // Slow, works every 1/5
+
+        // Works, but ugly
+        // if (Input.GetKeyDown(KeyCode.Q)) {
+        //     playerWeapon = weaponHandler.SelectNextWeapon();
+        //     GetComponent<PlayerMove>().playerSpriteRenderer.ResetRenderers(playerWeapon.transform);
+        // }
     }
 
     private void Attack() {
@@ -60,6 +54,12 @@ public class PlayerShoot : MonoBehaviour
 
     private void Reload() {
         playerWeapon.PlayReload();
+    }
+
+    private void SwitchWeapon() {
+        Debug.Log("Switching");
+        playerWeapon = weaponHandler.SelectNextWeapon();
+        GetComponent<PlayerMove>().playerSpriteRenderer.ResetRenderers(playerWeapon.transform);
     }
 
     private void Effect() {

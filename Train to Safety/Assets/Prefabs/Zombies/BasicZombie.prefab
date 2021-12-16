@@ -148,8 +148,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1b5c0b472dcb98340874ae50db0bccc9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  health: 20
-  state: 0
+  bzSpeed: 3
+  bzAttackDist: 1.5
+  bzAttackRate: 3
+  bzRange: 10
 --- !u!61 &3193287757434551392
 BoxCollider2D:
   m_ObjectHideFlags: 0

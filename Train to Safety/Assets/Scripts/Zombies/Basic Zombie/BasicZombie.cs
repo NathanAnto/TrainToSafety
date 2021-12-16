@@ -20,6 +20,7 @@ public class BasicZombie : Zombie
 
     private void Update()
     {
+        Debug.Log(State);
         playerPos = GameObject.Find("Dwight").transform;
         if (speed < bzSpeed) {
             speed += .1f;
