@@ -6,7 +6,6 @@ public static class BulletRaycast
 {
     public static void Shoot(Vector3 shootPos, Vector3 shootDir)
     {
-        Debug.DrawLine(shootPos, shootDir, Color.yellow, .1f);
         RaycastHit2D hit = Physics2D.Raycast(shootPos, shootDir);
 
         Weapon weapon = WeaponHandler.instance.GETCurrentWeapon();

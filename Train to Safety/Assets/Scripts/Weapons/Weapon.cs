@@ -20,7 +20,7 @@ public abstract class Weapon : MonoBehaviour
         }
     }
 
-    public abstract void changeValue(ref bool canAttack);
+    public abstract void Attack(Transform firePos, Vector3 shootDir);
     public virtual void PlayReload() { }
     
 }

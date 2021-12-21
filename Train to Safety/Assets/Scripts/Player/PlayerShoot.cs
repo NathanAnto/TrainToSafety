@@ -35,21 +35,11 @@ public class PlayerShoot : MonoBehaviour
     }
 
     private void Attack() {
-        var firePointPos = firePoint.position;
-        
         Vector3 mouseOnScreen = Utils.GetMouseWorldPosition();
-        Vector3 shootDir = (mouseOnScreen - firePointPos).normalized;
-
-        var canAttack = false;
+        Vector3 shootDir = (mouseOnScreen - firePoint.position).normalized;
 
         // Reduce ammo size
-        playerWeapon.changeValue(ref canAttack);
-
-        if (canAttack) {
-            Debug.Log("Shoot");
-            BulletRaycast.Shoot(firePointPos, shootDir);
-            Effect();
-        }
+        playerWeapon.Attack(firePoint, shootDir);
     }
 
     private void Reload() {
@@ -60,9 +50,5 @@ public class PlayerShoot : MonoBehaviour
         Debug.Log("Switching");
         playerWeapon = weaponHandler.SelectNextWeapon();
         GetComponent<PlayerMove>().playerSpriteRenderer.ResetRenderers(playerWeapon.transform);
-    }
-
-    private void Effect() {
-        ObjectPooler.instance.SpawnFromPool("bullets", firePoint.position, firePoint.rotation);
     }
 }

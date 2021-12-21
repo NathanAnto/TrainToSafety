@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using JetBrains.Annotations;
 using UnityEngine;
@@ -13,9 +14,10 @@ public class Ranged : Weapon
     private float nextFire;
     private int maxAmmo;
     private int maxMagSize;
+    private bool canAttack = true;
+    private bool reloading;
     private Animator animator;
     private static readonly int Reloading = Animator.StringToHash("Reloading");
-    private static readonly int CanShoot = Animator.StringToHash("CanShoot");
 
     private void Start() {
         maxAmmo = ammo;
@@ -25,56 +27,77 @@ public class Ranged : Weapon
         animator = GetComponent<Animator>();
     }
 
-    public override void changeValue(ref bool canAttack)
+    private void FixedUpdate() => animator.SetBool("Reloading", reloading);
+
+    // TODO Create Bolt action class for shotgun and sniper weapons
+    /// <summary>
+    /// When attack is triggered
+    /// </summary>
+    /// <param name="firePoint"></param>
+    /// <param name="shootDir"></param>
+    /// <returns>void</returns>
+    public override void Attack(Transform firePoint, Vector3 shootDir)
     {
-        if (animator.GetBool(Reloading) && !animator.GetBool(CanShoot)) return;
-        canAttack = Time.time > nextFire;
-        
         // On left mouse click
-        if (canAttack) {
-            animator.SetTrigger("Shoot");
+        if (canAttack && !reloading) {
+            Debug.Log("Shoot");
             nextFire = Time.time + attackRate;
             magSize--;
+            
+            var position = firePoint.position;
+            BulletRaycast.Shoot(position, shootDir);
+            ObjectPooler.instance.SpawnFromPool("bullets", position, firePoint.rotation);
+            animator.SetTrigger("Shoot");
+            
+            // if mag is empty
             if(magSize <= 0) {
-                ammo -= maxMagSize; 
+                ammo -= maxMagSize;
+                // TODO Stop weird shooting after reloading an empty clip
                 PlayReload();
-            } else if(ammo <= 0) {
+            }
+            // if ammo is empty
+            else if(ammo <= 0) {
                 Debug.Log("Switching weapon...");
                 // weaponHandler.selectNextWeapon();
                 // Debug.Log($"Weapon {weaponHandler.getCurrentWeapon().name}");
                 SetMaxAmmo();
             }
         }
+        
+        canAttack = Time.time > nextFire;
     }
 
+    /// <summary>
+    /// Play reload animation if needed
+    /// </summary>
     public override void PlayReload()
     {
-        if (!animator.GetBool(Reloading) && magSize < maxMagSize) {
-            Debug.Log("Starting reload");
-            animator.SetBool(Reloading, true);
-            animator.SetBool(CanShoot, false);
+        if (magSize < maxMagSize) {
+            reloading = true;
         }
     }
-
-    private void IncrementReloadCount()
-    {
+    
+    /// <summary>
+    /// Called after every reload
+    /// </summary>
+    private void IncrementReloadCount() {
         magSize++;
         // If can reload
         if (magSize < maxMagSize) {
-            animator.Play("Shotgun_reload");
+            reloading = true;
         } else {
-            Debug.Log("Reloaded full mag");
+            ////Debug.Log("Reloaded full mag");
             animator.Play("Shotgun_action");
-            animator.SetBool(Reloading, false);
         }
     }
 
-    // TODO: Activate shoot when after reload and action animation
+    /// <summary>
+    /// When reloading action is over
+    /// </summary>
     private void ActivateShoot() {
-        Debug.Log("Reactivating shooting");
-        animator.SetBool(CanShoot, true);
+        reloading = false;
     }
-    
+
     private void SetMaxAmmo() {
         ammo = maxAmmo;
     }

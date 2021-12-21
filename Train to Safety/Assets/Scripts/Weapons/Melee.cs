@@ -16,8 +16,7 @@ public class Melee : Weapon
         Debug.Log("Slashing");
     }
 
-    public override void changeValue(ref bool canAttack) {
+    public override void Attack(Transform firePos, Vector3 attackDir) {
         durability--;
-        canAttack = false;
     }
 }
